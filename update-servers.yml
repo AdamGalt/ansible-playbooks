@@ -1,0 +1,80 @@
+---
+# Update and Upgrade all servers
+
+- name: update and upgrade packages then reboot if required
+  hosts: all
+  become: true
+  serial: 1 # only running one host at a time
+  any_errors_fatal: true
+  max_fail_percentage: 0
+
+  tasks:
+
+    # do "apt-get update", to ensure latest pkg lists
+    - name: update the cache
+      apt:
+        update-cache: yes
+      changed_when: 0
+
+    # list packages that have updates available
+    - name: fetch list of upgrades
+      command: apt-get --simulate dist-upgrade
+      args:
+        warn: false
+      register: apt_simulate
+
+    # if new kernel incoming, remove old one(s) to avoid full /boot
+
+    - name: apt-get autoremove
+      command: apt-get -y autoremove
+      args:
+        warn: false
+      when: '"Inst linux-image-" in apt_simulate.stdout'
+      changed_when: 0
+
+    # do the actual apt-get dist-upgrade
+
+    - name: apt-get dist-upgrade
+      apt:
+        upgrade: dist # upgrade all packages to latest version
+      register: upgrade_output
+
+    # check if we need a reboot
+
+    - name: check if reboot needed
+      stat: path=/var/run/reboot-required
+      register: file_reboot_required
+
+    # "meta: end_play" aborts the rest of the tasks in the current «tasks:» section 
+    # "when:" clause ensures that the "meta: end_play" only triggers 
+    # if the current server doesn't need a reboot
+
+    - meta: end_play
+      when: not file_reboot_required.stat.exists
+
+    # If reboot is required, reboot!
+
+    - name: Confirm reboot of {{ inventory_hostname }}
+      pause:
+ 
+    - name: reboot node 
+      shell: sleep 2 && shutdown -r now "Reboot triggered by ansible" 
+      async: 1
+      poll: 0
+      ignore_errors: true
+
+    # keep polling ssh port until we get a tcp connect
+
+    - name: wait for node to finish booting
+      become: false
+      local_action: wait_for host={{ ansible_ssh_host }}
+          port=22
+          state=started
+          delay=5
+          timeout=600
+
+    # give sshd time to start fully
+
+    - name: wait for ssh to start fully 
+      pause:
+        seconds: 15
