@@ -1,0 +1,11 @@
+---
+
+
+# Sets auth keys on all servers for adamgalt from Github
+- hosts: all
+  tasks:
+  - name: Set authorized keys from URL
+    authorized_key:
+      user: adam
+      state: present
+      key: https://github.com/adamgalt.keys
