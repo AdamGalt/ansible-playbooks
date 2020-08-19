@@ -54,8 +54,8 @@
 
     # If reboot is required, reboot!
 
-    - name: Confirm reboot of {{ inventory_hostname }}
-      pause:
+#    - name: Confirm reboot of {{ inventory_hostname }}
+#      pause:
  
     - name: reboot node 
       shell: sleep 2 && shutdown -r now "Reboot triggered by ansible" 
