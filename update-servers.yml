@@ -67,11 +67,14 @@
 
     - name: wait for node to finish booting
       become: false
-      local_action: wait_for host={{ ansible_host }}
-          port=22
-          state=started
-          delay=5
-          timeout=600
+      wait_for:
+        host:'{{ (ansible_ssh_host|default(ansible_host))|default(inventory_hostname) }}'
+        port:22
+        search_regex: OpenSSH
+        state:started
+        delay:5
+        timeout:600
+      connection: local
 
     # give sshd time to start fully
 
