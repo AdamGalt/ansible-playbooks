@@ -1,0 +1,31 @@
+---
+- name: update package list then install zabbix agent
+  hosts: all
+  become: yes
+  serial: 1 # only running one host at a time
+  any_errors_fatal: true
+  max_fail_percentage: 0
+
+  tasks:
+    # do "apt-get update", to ensure latest pkg lists
+    - name: update the cache
+      apt:
+        update-cache: yes
+      changed_when: 0
+
+    - name: Install zabbix agent
+      shell: apt-get -y install zabbix-agent
+    - name: modify zabbix server ip address
+      shell: sed -i 's#Server=127.0.0.1#Server='{{zabbix_server_ip}}'#g' /etc/zabbix/zabbix_agentd.conf
+      vars:
+       zabbix_server_ip: 192.168.1.60
+    - name: modify zabbix server active ip addr
+      shell: sed -i 's/ServerActive=127.0.0.1/ServerActive='{{zabbix_server_ip}}'/g' /etc/zabbix/zabbix_agentd.conf
+      vars:
+       zabbix_server_ip: 192.168.1.60
+    - name: Enable remote shell execution
+      shell: sed -i 's/# EnableRemoteshells=0/EnableRemoteshells=1'/g /etc/zabbix/zabbix_agentd.conf
+    - name: Enable remote shell logs
+      shell: sed -i 's/# LogRemoteshells=0/LogRemoteshells=1'/g /etc/zabbix/zabbix_agentd.conf
+    - name: enable zabbix-agent
+      shell: systemctl start zabbix-agent ;systemctl enable zabbix-agent
