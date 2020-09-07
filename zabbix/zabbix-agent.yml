@@ -23,9 +23,7 @@
       shell: sed -i 's/ServerActive=127.0.0.1/ServerActive='{{zabbix_server_ip}}'/g' /etc/zabbix/zabbix_agentd.conf
       vars:
        zabbix_server_ip: 192.168.1.60
-    - name: Enable remote shell execution
-      shell: sed -i 's/# EnableRemoteshells=0/EnableRemoteshells=1'/g /etc/zabbix/zabbix_agentd.conf
-    - name: Enable remote shell logs
-      shell: sed -i 's/# LogRemoteshells=0/LogRemoteshells=1'/g /etc/zabbix/zabbix_agentd.conf
+    - name: Enable system.hostname
+      shell: sed -i 's/# HostnameItem=system.hostname/HostnameItem=system.hostname /g' /etc/zabbix/zabbix_agentd.conf
     - name: enable zabbix-agent
-      shell: systemctl start zabbix-agent ;systemctl enable zabbix-agent
+      shell: systemctl restart zabbix-agent ;systemctl enable zabbix-agent
