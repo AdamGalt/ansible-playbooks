@@ -26,6 +26,6 @@
     - name: Enable system.hostname
       shell: sed -i 's/# HostnameItem=system.hostname/HostnameItem=system.hostname /g' /etc/zabbix/zabbix_agentd.conf
     - name: Disable entry 'Hostname=Zabbix server'
-      shell: sed -i 's/Hostname=Zabbix server/#Hostname=Zabbix server /g' /etc/zabbix/zabbix_agent.conf
+      shell: sed -i 's/Hostname=Zabbix server/#Hostname=Zabbix server /g' /etc/zabbix/zabbix_agentd.conf
     - name: Enable zabbix-agent
       shell: systemctl restart zabbix-agent ;systemctl enable zabbix-agent
