@@ -2,7 +2,7 @@
 # Setup all computers with same environment
 
 - name: Setup all computers with same environment
-  hosts: all:!raspberrypi
+  hosts: all:!ARM-machines
   become: yes
   serial: 1 # only running one host at a time
   any_errors_fatal: true
