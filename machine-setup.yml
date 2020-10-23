@@ -34,19 +34,20 @@
     - name: install snaps
       community.general.snap:
         name: lsd
+        state: present
 
     - name: setup aliases
-      lineinfile:
+      blockinfile:
         path: /home/adam/.bashrc
         state: present
-        line: alias ls='lsd'
-        line: alias uptime='uptime | cowsay | lolcat'
-        line: alias home='ssh adam@home.galt.me'
-        line: alias work='ssh adam@login.robots.ox.ac.uk'
-        line: alias lolemp='ssh adam@galt.me'
-        line: alias plz='sudo !!'
-        line: alias ping='mtr'
-        line: alias nuke='kill -9'
-        line: alias zzz='sudo shutdown now'
-        line: alias rrr='sudo reboot now'
-        line: alias make='colormake'
+        content:"alias ls='lsd'
+            alias uptime='uptime | cowsay | lolcat'
+            alias home='ssh adam@home.galt.me'
+            alias work='ssh adam@login.robots.ox.ac.uk'
+            alias lolemp='ssh adam@galt.me'
+            alias plz='sudo !!'
+            alias ping='mtr'
+            alias nuke='kill -9'
+            alias zzz='sudo shutdown now'
+            alias rrr='sudo reboot now'
+            alias make='colormake'"
