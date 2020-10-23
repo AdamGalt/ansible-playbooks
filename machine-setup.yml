@@ -23,7 +23,6 @@
         pkg:
         - mosh
         - cowsay
-        - uptime
         - ping
         - snapd
         - lolcat
