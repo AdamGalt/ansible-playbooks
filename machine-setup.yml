@@ -40,7 +40,8 @@
       blockinfile:
         path: /home/adam/.bashrc
         state: present
-        content:"alias ls='lsd'
+        content: |
+            alias ls='lsd'
             alias uptime='uptime | cowsay | lolcat'
             alias home='ssh adam@home.galt.me'
             alias work='ssh adam@login.robots.ox.ac.uk'
@@ -50,4 +51,4 @@
             alias nuke='kill -9'
             alias zzz='sudo shutdown now'
             alias rrr='sudo reboot now'
-            alias make='colormake'"
+            alias make='colormake'
