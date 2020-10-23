@@ -1,2 +1,4 @@
+---
 # from galaxy
-ansible-galaxy collection install community.general
+collections:
+- community.general
