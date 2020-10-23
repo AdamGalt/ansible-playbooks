@@ -1,0 +1,52 @@
+---
+# Setup all computers with same environment
+
+- name: Setup all computers with same environment
+  hosts: all
+  become: yes
+  serial: 1 # only running one host at a time
+  any_errors_fatal: true
+  max_fail_percentage: 0
+
+  tasks:
+
+    # do "apt-get update", to ensure latest pkg lists
+    - name: update the cache
+      apt:
+        update-cache: yes
+        cache_valid_time: 3600
+      changed_when: 0
+
+    # list packages that have updates available
+    - name: install packages for personal environment
+      apt:
+        pkg:
+        - mosh
+        - cowsay
+        - uptime
+        - ping
+        - snapd
+        - lolcat
+        - mtr
+        - colormake
+
+    - name: install snaps
+      community.general.snap:
+        name:
+        - lsd
+
+    - name: setup aliases
+      lineinfile:
+        path: /home/adam/.bashrc
+        state: present
+        line: alias ls='lsd'
+        line: alias uptime='uptime | cowsay | lolcat'
+        line: alias home='ssh adam@home.galt.me'
+        line: alias work='ssh adam@login.robots.ox.ac.uk'
+        line: alias lolemp='ssh adam@galt.me'
+        line: alias plz='sudo !!'
+        line: alias ping='mtr'
+        line: alias nuke='kill -9'
+        line: alias zzz='sudo shutdown now'
+        line: alias rrr='sudo reboot now'
+        line: alias make='colormake'
