@@ -30,10 +30,10 @@
         - mtr
         - colormake
 
+    # Install snap packages
     - name: install snaps
       community.general.snap:
-        name:
-        - lsd
+        name: lsd
 
     - name: setup aliases
       lineinfile:
