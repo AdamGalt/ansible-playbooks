@@ -2,3 +2,4 @@
 # from galaxy
 collections:
 - community.general
+- community.vmware
