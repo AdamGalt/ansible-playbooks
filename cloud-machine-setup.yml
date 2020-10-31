@@ -32,11 +32,34 @@
         - unattended-upgrades
         - logwatch
 
+    # Install snap packages
+    - name: install snaps
+      community.general.snap:
+        name: lsd
+        state: present
+
+    - name: setup aliases
+      blockinfile:
+        path: /home/adam/.bashrc
+        state: present
+        content: |
+            alias ls='lsd'
+            alias uptime='uptime | cowsay | lolcat'
+            alias home='ssh {{ home_alias }}'
+            alias work='ssh {{ work_alias }}'
+            alias lolemp='ssh {{ web_alias }}'
+            alias plz='sudo !!'
+            alias ping='mtr'
+            alias nuke='kill -9'
+            alias zzz='sudo shutdown now'
+            alias rrr='sudo reboot now'
+            alias make='colormake'
+
     # Add and config user
     - name: Change root password
       user: name=root password="{{ UBUNTU_COMMON_ROOT_PASSWORD }}"
 
-    - name: Add deploy user
+    - name: Add user
       user: name={{ ubuntu_common_deploy_user_name }} password="{{ UBUNTU_COMMON_DEPLOY_PASSWORD }}" shell=/bin/bash
 
     - name: Set authorized keys from URL
@@ -45,7 +68,7 @@
         state: present
         key: https://github.com/adamgalt.keys
 
-    - name: Add deploy user to sudoers
+    - name: Add user to sudoers
       lineinfile: dest=/etc/sudoers
                   regexp="{{ ubuntu_common_deploy_user_name }} ALL"
                   line="{{ ubuntu_common_deploy_user_name }} ALL=(ALL) ALL"
@@ -79,26 +102,3 @@
   handlers:
     - name: Restart ssh
       service: name=ssh state=restarted
-
-    # Install snap packages
-    - name: install snaps
-      community.general.snap:
-        name: lsd
-        state: present
-
-    - name: setup aliases
-      blockinfile:
-        path: /home/adam/.bashrc
-        state: present
-        content: |
-            alias ls='lsd'
-            alias uptime='uptime | cowsay | lolcat'
-            alias home='ssh {{ home_alias }}'
-            alias work='ssh {{ work_alias }}'
-            alias lolemp='ssh {{ web_alias }}'
-            alias plz='sudo !!'
-            alias ping='mtr'
-            alias nuke='kill -9'
-            alias zzz='sudo shutdown now'
-            alias rrr='sudo reboot now'
-            alias make='colormake'
