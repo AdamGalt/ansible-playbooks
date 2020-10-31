@@ -58,7 +58,6 @@
 
     - name: Allow mosh traffic
       ufw: rule=allow proto=udp port={{ ubuntu_common_mosh_from_port }}:{{ ubuntu_common_mosh_to_port }}
-      when: "'mosh' in ubuntu_common_optional_packages"
     
     - name: Disallow password authentication
       lineinfile: dest=/etc/ssh/sshd_config
