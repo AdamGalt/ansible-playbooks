@@ -17,7 +17,7 @@
         cache_valid_time: 3600
       changed_when: 0
 
-    # list packages that have updates available
+    # install packages
     - name: install packages for personal environment
       apt:
         pkg:
@@ -27,6 +27,59 @@
         - lolcat
         - mtr
         - colormake
+        - fail2ban
+        - ufw
+        - unattended-upgrades
+        - logwatch
+
+    # Add and config user
+    - name: Change root password
+      user: name=root password="{{ UBUNTU_COMMON_ROOT_PASSWORD }}"
+
+    - name: Add deploy user
+      user: name={{ ubuntu_common_deploy_user_name }} password="{{ UBUNTU_COMMON_DEPLOY_PASSWORD }}" shell=/bin/bash
+
+    - name: Set authorized keys from URL
+      authorized_key:
+        user: adam
+        state: present
+        key: https://github.com/adamgalt.keys
+
+    - name: Add deploy user to sudoers
+      lineinfile: dest=/etc/sudoers
+                  regexp="{{ ubuntu_common_deploy_user_name }} ALL"
+                  line="{{ ubuntu_common_deploy_user_name }} ALL=(ALL) ALL"
+                  state=present
+
+    # Security enforcement    
+
+    - name: Setup ufw
+      ufw: state=enabled policy=deny
+
+    - name: Allow ssh traffic
+      ufw: rule=allow port={{ ubuntu_common_ssh_port }} proto=tcp
+
+    - name: Allow mosh traffic
+      ufw: rule=allow proto=udp port={{ ubuntu_common_mosh_from_port }}:{{ ubuntu_common_mosh_to_port }}
+      when: "'mosh' in ubuntu_common_optional_packages"
+    
+    - name: Disallow password authentication
+      lineinfile: dest=/etc/ssh/sshd_config
+                  regexp="^PasswordAuthentication"
+                  line="PasswordAuthentication no"
+                  state=present
+      notify: Restart ssh
+
+    - name: Disallow root SSH access
+      lineinfile: dest=/etc/ssh/sshd_config
+                  regexp="^PermitRootLogin"
+                  line="PermitRootLogin no"
+                  state=present
+      notify: Restart ssh
+
+  handlers:
+    - name: Restart ssh
+      service: name=ssh state=restarted
 
     # Install snap packages
     - name: install snaps
@@ -41,9 +94,9 @@
         content: |
             alias ls='lsd'
             alias uptime='uptime | cowsay | lolcat'
-            alias home='ssh adam@home.galt.me'
-            alias work='ssh adam@login.robots.ox.ac.uk'
-            alias lolemp='ssh adam@galt.me'
+            alias home='ssh {{ home_alias }}'
+            alias work='ssh {{ work_alias }}'
+            alias lolemp='ssh {{ web_alias }}'
             alias plz='sudo !!'
             alias ping='mtr'
             alias nuke='kill -9'
