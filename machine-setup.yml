@@ -36,6 +36,7 @@
     - name: install snaps
       community.general.snap:
         name: lsd
+        classic: yes
         state: present
 
     - name: setup aliases
