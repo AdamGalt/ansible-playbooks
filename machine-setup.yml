@@ -33,18 +33,18 @@
         - logwatch
 
     # Install snap packages
-    - name: install snaps
-      community.general.snap:
-        name: lsd
-        classic: yes
-        state: present
+#    - name: install snaps
+#      community.general.snap:
+#        name: lsd
+#        classic: yes
+#        state: present
 
     - name: setup aliases
       blockinfile:
         path: /home/adam/.bashrc
         state: present
         content: |
-            alias ls='lsd'
+#            alias ls='lsd'
             alias uptime='uptime | cowsay | lolcat'
             alias home='ssh {{ home_alias }}'
             alias work='ssh {{ work_alias }}'
