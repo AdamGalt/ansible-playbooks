@@ -44,7 +44,6 @@
         path: /home/adam/.bashrc
         state: present
         content: |
-#            alias ls='lsd'
             alias uptime='uptime | cowsay | lolcat'
             alias home='ssh {{ home_alias }}'
             alias work='ssh {{ work_alias }}'
