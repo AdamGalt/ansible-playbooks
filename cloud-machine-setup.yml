@@ -33,12 +33,31 @@
         - logwatch
 
     # Install snap packages
-#    - name: install snaps
-#      community.general.snap:
-#        name: lsd
+    - name: install snaps
+      community.general.snap:
+        name: bpytop
 #        classic: yes
-#        state: present
+        state: present
 
+    # Setup Snap plugs
+    - name: Snap Packages - Setup Plugs
+      changed_when: false
+      shell: 'snap connect {{ item.app }}:{{ item.plug }}'
+      with_items:
+        - plug: mount-observe
+          app: bpytop
+        - plug: network-control
+          app: bpytop
+        - plug: hardware-observe
+          app: bpytop          
+        - plug: system-observe
+          app: bpytop
+        - plug: process-control
+          app: bpytop          
+        - plug: physical-memory-observe
+          app: bpytop
+
+    # Setup Aliases
     - name: setup aliases
       blockinfile:
         path: /home/adam/.bashrc
