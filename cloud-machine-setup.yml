@@ -31,6 +31,8 @@
         - ufw
         - unattended-upgrades
         - logwatch
+        - rdiff-backup
+        - rsync
 
     # Install snap packages
     - name: install snaps
