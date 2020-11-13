@@ -31,8 +31,9 @@
         - ufw
         - unattended-upgrades
         - logwatch
-        - rdiff-backup
         - rsync
+        - borgbackup
+        - borgmatic
 
     # Install snap packages
     - name: install snaps
