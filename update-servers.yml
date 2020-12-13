@@ -69,15 +69,15 @@
       become: false
       wait_for:
         host:'{{ (ansible_ssh_host|default(ansible_host))|default(inventory_hostname) }}'
-        port: 22
-        search_regex: OpenSSH
-        state: started
-        delay: 5
-        timeout: 300
-      connection: local
+        port:22
+        search_regex:OpenSSH
+        state:started
+        delay:5
+        timeout:300
+      connection:local
 
     # give sshd time to start fully
 
     - name: wait for ssh to start fully 
       pause:
-        seconds: 15
+        seconds: 10
