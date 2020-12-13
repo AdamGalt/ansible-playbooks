@@ -7,6 +7,8 @@
   serial: 1 # only running one host at a time
   any_errors_fatal: true
   max_fail_percentage: 0
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
 
   tasks:
 
@@ -34,6 +36,7 @@
         - rsync
         - borgbackup
         - borgmatic
+        - python3
 
     # Install snap packages
 #    - name: install snaps
