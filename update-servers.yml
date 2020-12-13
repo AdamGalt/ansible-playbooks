@@ -76,7 +76,7 @@
         state:started
         delay:5
         timeout:300
-      connection:local
+      connection: local
 
     # give sshd time to start fully
 
