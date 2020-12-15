@@ -3,7 +3,10 @@
 
 # Sets auth keys on all servers for adamgalt from Github
 - hosts: all
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
   tasks:
+
   - name: Set authorized keys from URL
     authorized_key:
       user: adam
