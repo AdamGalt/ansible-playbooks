@@ -1,9 +1,9 @@
 ---
--name: Shutdown LAN machines
- hosts: all
- become: yes
- gather_facts: no 
- vars:
+- name: Shutdown LAN machines
+  hosts: all
+  become: yes
+  gather_facts: no 
+  vars:
     ansible_python_interpreter: /usr/bin/python3 
 
 
