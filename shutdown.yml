@@ -1,6 +1,6 @@
 ---
 - name: Shutdown LAN machines
-  hosts: all
+  hosts: zabbix
   become: yes
   gather_facts: no 
   vars:
