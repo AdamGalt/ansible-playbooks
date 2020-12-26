@@ -1,0 +1,9 @@
+---
+-name: Shutdown LAN machines
+ hosts: zabbix
+ become: yes
+ 
+ 
+ tasks:
+ - name: Shutdown computers
+ community.general.shutdown:
