@@ -18,11 +18,11 @@
     - name: modify zabbix server ip address
       shell: sed -i 's#Server=127.0.0.1#Server='{{zabbix_server_ip}}'#g' /etc/zabbix/zabbix_agentd.conf
       vars:
-       zabbix_server_ip: 192.168.1.60
+       zabbix_server_ip: 192.168.1.54
     - name: modify zabbix server active ip addr
       shell: sed -i 's/ServerActive=127.0.0.1/ServerActive='{{zabbix_server_ip}}'/g' /etc/zabbix/zabbix_agentd.conf
       vars:
-       zabbix_server_ip: 192.168.1.60
+       zabbix_server_ip: 192.168.1.54
     - name: Enable system.hostname
       shell: sed -i 's/# HostnameItem=system.hostname/HostnameItem=system.hostname /g' /etc/zabbix/zabbix_agentd.conf
     - name: Disable entry 'Hostname=Zabbix server'
