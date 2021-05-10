@@ -25,7 +25,6 @@
         pkg:
         - mosh
         - cowsay
-        - snapd
         - lolcat
         - mtr
         - colormake
@@ -38,31 +37,6 @@
         - borgmatic
         - python3
 
-    # Install snap packages
-    - name: install snaps
-      community.general.snap:
-        name: bpytop
-#        classic: yes
-        state: present
-
-    # Setup Snap plugs
-    - name: Snap Packages - Setup Plugs
-      changed_when: false
-      shell: 'snap connect {{ item.app }}:{{ item.plug }}'
-      with_items:
-        - plug: mount-observe
-          app: bpytop
-        - plug: network-control
-          app: bpytop
-        - plug: hardware-observe
-          app: bpytop          
-        - plug: system-observe
-          app: bpytop
-        - plug: process-control
-          app: bpytop          
-        - plug: physical-memory-observe
-          app: bpytop
-
     # Setup Aliases
     - name: setup aliases
       blockinfile:
@@ -74,7 +48,6 @@
             alias work='ssh {{ work_alias }}'
             alias lolemp='ssh {{ web_alias }}'
             alias plz='sudo !!'
-            alias ping='mtr'
             alias nuke='kill -9'
             alias zzz='sudo shutdown now'
             alias rrr='sudo reboot now'

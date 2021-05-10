@@ -55,7 +55,6 @@
             alias work='ssh {{ work_alias }}'
             alias lolemp='ssh {{ web_alias }}'
             alias plz='sudo !!'
-            alias ping='mtr'
             alias nuke='kill -9'
             alias zzz='sudo shutdown now'
             alias rrr='sudo reboot now'
